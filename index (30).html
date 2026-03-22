@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Miyu Natsume — Web Director</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,200;0,9..40,300;0,9..40,400;1,9..40,200&family=Noto+Sans+JP:wght@200;300;400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#0d0d0d;
+  --gray-dark:#3a3a3a;
+  --gray-mid:#888;
+  --gray-light:#ccc;
+  --gray-bg:#f5f5f3;
+  --white:#fff;
+  --line:#e8e8e6;
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--white);
+  color:var(--black);
+  font-family:'DM Sans','Noto Sans JP',sans-serif;
+  font-weight:300;
+  font-size:13px;
+  line-height:1.7;
+  overflow-x:hidden;
+}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 6%;height:60px;
+  background:rgba(255,255,255,.95);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+}
+.nav-logo{
+  font-family:'DM Sans',sans-serif;
+  font-size:13px;font-weight:300;
+  letter-spacing:.06em;color:var(--black);
+  text-decoration:none;
+}
+.nav-links{display:flex;gap:40px}
+.nav-links a{
+  font-size:13px;font-weight:300;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--gray-mid);text-decoration:none;
+  transition:color .2s;
+  position:relative;
+}
+.nav-links a:hover,.nav-links a.active{color:var(--black)}
+.nav-links a.active::after{
+  content:'';position:absolute;bottom:-4px;left:0;right:0;
+  height:1px;background:var(--black);
+}
+
+/* PAGES */
+.page{display:none;padding-top:60px;min-height:100vh;}
+
+.page.active{display:block}
+
+/* HERO */
+#page-work .hero{
+  padding:120px max(32px, calc((100% - 1060px) / 2)) 100px;
+  border-bottom:none;
+  background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.55)), url('images/hero_bg.jpg') center center / cover no-repeat;
+  min-height:70vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+}
+.hero-label{
+  font-size:13px;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(255,255,255,0.6);margin-bottom:24px;
+}
+.hero-name{
+  font-family:'DM Sans',sans-serif;
+  font-size:clamp(48px,7vw,96px);
+  font-weight:500;line-height:.95;
+  letter-spacing:-.02em;color:#fff;
+  margin-bottom:6px;
+}
+.hero-name-ja{
+  font-family:'Noto Sans JP',sans-serif;
+  font-size:clamp(14px,1.5vw,18px);
+  font-weight:200;letter-spacing:.2em;
+  color:rgba(255,255,255,0.7);margin-bottom:40px;display:block;
+}
+.hero-desc-en{
+  font-size:13px;font-weight:300;line-height:1.85;
+  color:rgba(255,255,255,0.85);max-width:860px;margin-bottom:10px;
+}
+.hero-desc-ja{
+  font-size:13px;font-weight:200;line-height:1.85;
+  color:rgba(255,255,255,0.7);max-width:860px;
+  font-family:'Noto Sans JP',sans-serif;
+}
+
+/* WORK GRID */
+.work-section{padding:80px max(32px, calc((100% - 1060px) / 2));}
+.work-section-label{
+  font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gray-mid);margin-bottom:48px;
+  padding-bottom:16px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:6px;
+}
+.work-section-label span{font-family:'Noto Sans JP';font-weight:200;font-size:11px;letter-spacing:.06em;text-transform:none;}
+.work-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);}
+.work-card{
+  background:var(--white);padding:40px 36px;
+  cursor:pointer;transition:background .2s;
+  text-decoration:none;color:inherit;
+  display:flex;flex-direction:column;gap:0;
+}
+.work-card:hover{background:var(--gray-bg)}
+.work-card-num{
+  font-size:13px;letter-spacing:.16em;
+  color:var(--gray-light);margin-bottom:32px;
+}
+.work-card-thumb{
+  aspect-ratio:16/9;background:var(--gray-bg);
+  overflow:hidden;margin-bottom:28px;
+}
+.work-card-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease;}
+.work-card:hover .work-card-thumb img{transform:scale(1.03)}
+.work-card-en{
+  font-family:'DM Sans',sans-serif;
+  font-size:16px;font-weight:400;
+  letter-spacing:-.01em;line-height:1.2;
+  color:var(--black);margin-bottom:16px;margin-top:6px;
+}
+.work-card-ja{
+  font-size:13px;font-weight:200;
+  color:var(--gray-mid);
+  font-family:'Noto Sans JP',sans-serif;
+  margin-bottom:4px;
+}
+.work-card-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;}
+.work-tag{
+  font-size:13px;letter-spacing:.08em;
+  color:var(--gray-mid);
+  padding:3px 10px;
+  border:1px solid var(--line);
+}
+.work-card-link{
+  font-size:13px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--gray-mid);margin-top:auto;
+  display:flex;align-items:center;gap:8px;
+}
+.work-card-link::after{content:'→';transition:transform .2s}
+.work-card:hover .work-card-link{color:var(--black)}
+.work-card:hover .work-card-link::after{transform:translateX(4px)}
+
+/* DESIGN WORKS */
+.design-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);}
+.design-card{
+  background:var(--white);
+  aspect-ratio:4/3;overflow:hidden;cursor:zoom-in;
+}
+.design-card img{width:100%;height:100%;object-fit:contain;padding:20px;display:block;transition:transform .4s ease;}
+.design-card:hover img{transform:scale(1.04)}
+
+/* CASE DETAIL */
+/* CASE DETAIL */
+.case-back{
+  padding:24px max(32px, calc((100% - 1060px) / 2));border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:8px;
+  font-size:13px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--gray-mid);cursor:pointer;
+  transition:color .2s;text-decoration:none;
+  background:none;border:none;font-family:inherit;
+}
+.case-back:hover{color:var(--black)}
+.case-hero{padding:80px max(32px, calc((100% - 1060px) / 2)) 60px;border-bottom:1px solid var(--line);}
+.case-num{font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--gray-mid);margin-bottom:20px;}
+.case-title-en{
+  font-family:'Noto Sans JP',sans-serif;
+  font-size:clamp(24px,3.5vw,48px);
+  font-weight:300;letter-spacing:.04em;
+  line-height:1.3;color:var(--black);margin-bottom:8px;
+}
+.case-title-ja{
+  font-size:13px;font-weight:200;color:var(--gray-mid);
+  font-family:'Noto Sans JP',sans-serif;margin-bottom:48px;
+}
+.case-meta-row{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:0;border-top:1px solid var(--line);
+}
+.case-meta-item{padding:24px 0;border-right:1px solid var(--line);padding-right:32px;margin-right:32px;}
+.case-meta-item:last-child{border-right:none}
+.case-meta-key{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--gray-mid);margin-bottom:6px;}
+.case-meta-val{font-size:13px;font-weight:300;color:var(--black);}
+.case-body{padding:80px max(32px, calc((100% - 1060px) / 2));}
+.case-step{margin-bottom:64px;}
+.case-step-label{
+  font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--gray-mid);margin-bottom:8px;
+  padding-bottom:12px;border-bottom:1px solid var(--line);
+}
+.case-step-label-ja{
+  font-size:11px;font-weight:200;color:var(--gray-mid);
+  font-family:'Noto Sans JP',sans-serif;
+  letter-spacing:.06em;text-transform:none;
+}
+.case-step-content-en{
+  font-size:13px;font-weight:300;line-height:1.9;
+  color:var(--gray-dark);margin-bottom:24px;
+}
+.case-step-content-en ul, .case-step-content-ja ul{
+  list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;
+}
+.case-step-content-en ul li, .case-step-content-ja ul li{
+  padding-left:16px;line-height:1.75;position:relative;
+}
+.case-step-content-en ul li::before, .case-step-content-ja ul li::before{
+  content:'·';position:absolute;left:0;color:var(--gray-mid);font-size:18px;line-height:1.4;
+}
+.case-step-content-en ul li[data-num], .case-step-content-ja ul li[data-num]{
+  padding-left:0;
+}
+.case-step-content-en ul li[data-num]::before, .case-step-content-ja ul li[data-num]::before{
+  content:none;
+}
+.case-step-content-ja{
+  font-size:13px;font-weight:200;line-height:1.9;
+  color:var(--gray-mid);font-family:'Noto Sans JP',sans-serif;margin-bottom:40px;
+}
+.case-results{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:0;background:var(--line);margin:80px 0;
+}
+.case-result{background:var(--white);padding:40px 36px;}
+.case-result-num{
+  font-family:'DM Serif Display',serif;
+  font-size:52px;font-weight:400;
+  line-height:1;letter-spacing:-.03em;
+  color:var(--black);margin-bottom:8px;
+}
+.case-result-en{font-size:14px;font-weight:400;color:var(--black);margin-bottom:4px;}
+.case-result-ja{font-size:13px;font-weight:200;color:var(--gray-mid);font-family:'Noto Sans JP',sans-serif;}
+.case-images{padding:0 max(32px, calc((100% - 1060px) / 2)) 80px;}
+.case-img-label{
+  font-size:13px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gray-mid);margin-bottom:16px;
+  padding-bottom:12px;border-bottom:1px solid var(--line);
+}
+.ba-grid{display:flex;flex-direction:column;gap:2px;}
+.ba-item{background:var(--white);}
+.ba-bar{
+  padding:12px 16px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--gray-bg);
+}
+.ba-bar-label{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--gray-mid);}
+.ba-bar-link{
+  font-size:13px;letter-spacing:.08em;color:var(--gray-mid);
+  text-decoration:none;transition:color .2s;
+}
+.ba-bar-link:hover{color:var(--black)}
+.ba-img{overflow:hidden;}
+.ba-img img{width:100%;height:auto;display:block;object-fit:contain;}
+
+/* ABOUT */
+.about-hero{padding:100px max(32px, calc((100% - 1060px) / 2)) 80px;border-bottom:1px solid var(--line);}
+.about-label{font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--gray-mid);margin-bottom:24px;}
+.about-title-en{
+  font-family:'DM Sans',sans-serif;
+  font-size:clamp(32px,5vw,64px);
+  font-weight:400;line-height:1.1;
+  letter-spacing:-.02em;color:var(--black);margin-bottom:8px;
+}
+.about-title-ja{font-size:13px;font-weight:200;color:var(--gray-mid);font-family:'Noto Sans JP',sans-serif;margin-bottom:56px;}
+.about-body{padding:80px max(32px, calc((100% - 1060px) / 2));}
+.about-desc-en{font-size:13px;font-weight:300;line-height:1.9;color:var(--gray-dark);margin-bottom:10px;}
+.about-desc-ja{font-size:13px;font-weight:200;line-height:1.9;color:var(--gray-mid);font-family:'Noto Sans JP',sans-serif;}
+.about-section-label{
+  font-size:13px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gray-mid);margin-bottom:24px;
+  padding-bottom:12px;border-bottom:1px solid var(--line);
+}
+.about-skill-item{
+  display:inline-flex;flex-direction:column;align-items:flex-start;
+  padding:10px 16px;border:1px solid var(--line);margin:0 8px 8px 0;
+}
+.about-skill-en{font-size:12px;font-weight:400;color:var(--black);letter-spacing:.04em;}
+.about-skill-ja{font-size:11px;font-weight:200;color:var(--gray-mid);font-family:'Noto Sans JP',sans-serif;margin-top:2px;}
+
+/* RESUME */
+.resume-hero{padding:100px max(32px, calc((100% - 1060px) / 2)) 60px;border-bottom:1px solid var(--line);}
+.resume-body{padding:0 max(32px, calc((100% - 1060px) / 2));}
+.resume-section{padding:60px 0;border-bottom:1px solid var(--line);}
+.resume-section-label{
+  font-size:13px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gray-mid);margin-bottom:40px;
+}
+.resume-item{display:grid;grid-template-columns:180px 1fr;gap:0;margin-bottom:40px;}
+.resume-period{font-size:12px;color:var(--gray-mid);font-weight:200;padding-top:4px;}
+.resume-detail{}
+.resume-co-en{font-size:17px;font-weight:500;color:var(--black);letter-spacing:.01em;margin-bottom:3px;}
+.resume-co-ja{font-size:13px;font-weight:200;color:var(--gray-mid);font-family:'Noto Sans JP',sans-serif;margin-bottom:12px;}
+.resume-role-en{
+  font-family:'DM Sans',sans-serif;
+  font-size:22px;font-weight:400;color:var(--black);
+  letter-spacing:-.01em;margin-bottom:4px;
+}
+.resume-role-ja{font-size:13px;font-weight:200;color:var(--gray-mid);font-family:'Noto Sans JP',sans-serif;margin-bottom:14px;}
+.resume-desc-en{font-size:14px;font-weight:300;line-height:1.85;color:var(--gray-dark);margin-bottom:6px;}
+.resume-desc-ja{font-size:13px;font-weight:200;line-height:1.85;color:var(--gray-mid);font-family:'Noto Sans JP',sans-serif;}
+
+/* CONTACT */
+.contact-section{padding:80px max(32px, calc((100% - 1060px) / 2));border-top:1px solid var(--line);}
+.contact-en{
+  font-family:'DM Sans',sans-serif;
+  font-size:clamp(24px,3vw,40px);
+  font-weight:400;color:var(--gray-dark);
+  letter-spacing:-.01em;line-height:1.4;margin-bottom:6px;
+}
+.contact-ja{font-size:13px;font-weight:200;color:var(--gray-mid);font-family:'Noto Sans JP',sans-serif;margin-bottom:24px;}
+.contact-email{font-size:13px;font-weight:300;color:var(--gray-dark);}
+
+footer{
+  border-top:1px solid var(--line);padding:24px max(32px, calc((100% - 1060px) / 2));
+  display:flex;justify-content:space-between;align-items:center;
+}
+.footer-copy{font-size:11px;color:var(--gray-light);letter-spacing:.08em;}
+
+@media(max-width:768px){
+  .work-grid{grid-template-columns:1fr}
+  .case-meta-row{grid-template-columns:1fr}
+  .case-results{grid-template-columns:1fr}
+  .ba-grid{grid-template-columns:1fr}
+  .about-body{grid-template-columns:1fr;gap:40px}
+  .resume-item{grid-template-columns:1fr}
+  .design-grid{grid-template-columns:1fr 1fr}
+  .nav-links{gap:20px}
+}
+
+.fade-in{opacity:1;transform:none;}
+.fade-in.visible{opacity:1;transform:none;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo" onclick="showPage('work');return false;">Miyu Natsume</a>
+  <div class="nav-links">
+    <a href="#" onclick="showPage('work');return false;" class="active" id="nav-work">Work</a>
+    <a href="#" onclick="showPage('about');return false;" id="nav-about">About</a>
+    <a href="#" onclick="showPage('resume');return false;" id="nav-resume">Resume</a>
+  </div>
+</nav>
+
+<!-- WORK PAGE -->
+<div class="page active" id="page-work">
+  <div class="hero">
+    <div class="hero-label">Portfolio</div>
+    <h1 class="hero-name">Hello!<br>I'm <em style="font-style:italic;font-weight:600;">Miyu Natsume.</em></h1>
+    <span class="hero-name-ja">夏目みゆ</span>
+    <p class="hero-desc-ja" style="font-size:18px;color:rgba(255,255,255,0.8);">A WEB Director at Rakuten for Rakuten Ichiba WEB.</p>
+  </div>
+
+  <div class="work-section" style="padding-bottom:60px; border-bottom:1px solid var(--line);">
+    <div class="work-section-label">
+      Responsibility / <span>担当領域</span>
+    </div>
+    <p style="font-size:15px;font-weight:300;color:var(--gray-dark);line-height:1.85;margin-bottom:6px;">全てのプロジェクトにおいて、企画立案・ユーザー分析からリリース後の効果測定まで、全工程を一気通貫でディレクションしています。</p>
+    <p style="font-size:12px;font-weight:200;color:var(--gray-mid);font-family:'Noto Sans JP',sans-serif;line-height:1.85;margin-bottom:48px;">I own all phases of web direction — from concept and user research through production, launch, and post-launch analysis — across all projects below.</p>
+
+    <div style="overflow-x:auto;">
+      <div style="display:flex;align-items:stretch;gap:3px;min-width:700px;">
+
+        <div style="background:#2a2a2a;padding:18px 20px;display:flex;align-items:center;justify-content:center;text-align:center;flex:1;clip-path:polygon(0 0,calc(100% - 14px) 0,100% 50%,calc(100% - 14px) 100%,0 100%);">
+          <span style="font-size:18px;font-weight:400;color:#fff;letter-spacing:.04em;line-height:1.4;">Concept &<br>Planning</span>
+        </div>
+
+        <div style="background:#2a2a2a;padding:18px 20px;display:flex;align-items:center;justify-content:center;text-align:center;flex:1;clip-path:polygon(0 0,calc(100% - 14px) 0,100% 50%,calc(100% - 14px) 100%,0 100%);">
+          <span style="font-size:18px;font-weight:400;color:#fff;letter-spacing:.04em;line-height:1.4;">User<br>Research</span>
+        </div>
+
+        <div style="background:#2a2a2a;padding:18px 20px;display:flex;align-items:center;justify-content:center;text-align:center;flex:1;clip-path:polygon(0 0,calc(100% - 14px) 0,100% 50%,calc(100% - 14px) 100%,0 100%);">
+          <span style="font-size:18px;font-weight:400;color:#fff;letter-spacing:.04em;line-height:1.4;">Design<br>Direction</span>
+        </div>
+
+        <div style="background:#2a2a2a;padding:18px 20px;display:flex;align-items:center;justify-content:center;text-align:center;flex:1;clip-path:polygon(0 0,calc(100% - 14px) 0,100% 50%,calc(100% - 14px) 100%,0 100%);">
+          <span style="font-size:18px;font-weight:400;color:#fff;letter-spacing:.04em;line-height:1.4;">Production<br>Management</span>
+        </div>
+
+        <div style="background:#2a2a2a;padding:18px 20px;display:flex;align-items:center;justify-content:center;text-align:center;flex:1;clip-path:polygon(0 0,calc(100% - 14px) 0,100% 50%,calc(100% - 14px) 100%,0 100%);">
+          <span style="font-size:18px;font-weight:400;color:#fff;letter-spacing:.04em;line-height:1.4;">Review &<br>Launch</span>
+        </div>
+
+        <div style="background:#2a2a2a;padding:18px 20px;display:flex;align-items:center;justify-content:center;text-align:center;flex:1;clip-path:polygon(0 0,calc(100% - 14px) 0,100% 50%,calc(100% - 14px) 100%,0 100%);">
+          <span style="font-size:18px;font-weight:400;color:#fff;letter-spacing:.04em;line-height:1.4;">Post Launch<br>Analysis</span>
+        </div>
+
+      </div>
+      <p style="font-size:12px;color:var(--gray-mid);text-align:center;margin-top:16px;font-family:'DM Sans',sans-serif;letter-spacing:.1em;">Design Process | デザインプロセス</p>
+    </div>
+  </div>
+
+  <div class="work-section">
+    <div class="work-section-label">
+      Selected Work / <span>主要プロジェクト</span>
+    </div>
+    <div class="work-grid">
+
+      <a class="work-card" onclick="showCase(2);return false;" href="#">
+        <div class="work-card-num">01</div>
+        <div class="work-card-thumb">
+          <img src="images/img_02.jpg" alt="Summer Campaign">
+        </div>
+        <div class="work-card-ja">ユーザーインサイトを起点にした大規模キャンペーン設計<br><span style="font-size:0.75em;font-weight:300;opacity:0.6;">暑さ対策フェア フルリニューアル</span></div>
+        <div class="work-card-en">Campaign Design Driven by User Insight</div>
+        <div class="work-card-tags">
+          <span class="work-tag">Full Redesign</span>
+          <span class="work-tag">Team Lead</span>
+          <span class="work-tag">KPI ↑37%</span>
+        </div>
+        <div class="work-card-link">View Case Study</div>
+      </a>
+
+      <a class="work-card" onclick="showCase(1);return false;" href="#" style="transition-delay:.1s">
+        <div class="work-card-num">02</div>
+        <div class="work-card-thumb">
+          <img src="images/capture_cosme_campaign.jpg" alt="Cosmetics Campaign">
+        </div>
+        <div class="work-card-ja">ターゲット再定義から生まれたコスメ企画<br><span style="font-size:0.75em;font-weight:300;opacity:0.6;">若年層向けコスメキャンペーン 企画・ディレクション</span></div>
+        <div class="work-card-en">Redefining the Target: Youth Cosmetics Campaign</div>
+        <div class="work-card-tags">
+          <span class="work-tag">User Research</span>
+          <span class="work-tag">Campaign Planning</span>
+          <span class="work-tag">SNS Strategy</span>
+        </div>
+        <div class="work-card-link">View Case Study</div>
+      </a>
+
+      <a class="work-card" onclick="showCase(3);return false;" href="#" style="transition-delay:.2s">
+        <div class="work-card-num">03</div>
+        <div class="work-card-thumb">
+          <img src="images/case2_after.jpg" alt="Rakken">
+        </div>
+        <div class="work-card-ja">データ分析で離脱率-4%を実現したUI/UX改善<br><span style="font-size:0.75em;font-weight:300;opacity:0.6;">楽券 トップページ改善</span></div>
+        <div class="work-card-en">Data-Driven UI/UX Redesign: -4% Bounce Rate</div>
+        <div class="work-card-tags">
+          <span class="work-tag">UI/UX</span>
+          <span class="work-tag">Data Analysis</span>
+          <span class="work-tag">Bounce ↓4%</span>
+        </div>
+        <div class="work-card-link">View Case Study</div>
+      </a>
+
+    </div>
+  </div>
+
+  <div class="contact-section">
+    <p class="contact-en">Thank you for viewing<br>my portfolio.</p>
+    <p class="contact-ja">ご覧いただき、ありがとうございました。</p>
+    <div class="contact-email" id="contact-mail-work"></div>
+  </div>
+  <footer>
+    <span class="footer-copy">© 2026 Miyu Natsume</span>
+    <span class="footer-copy" style="font-family:'DM Sans',sans-serif;font-size:12px;font-weight:300;letter-spacing:.1em;color:#bbb;">Web Director</span>
+  </footer>
+</div>
+
+<!-- CASE DETAIL PAGE -->
+<div class="page" id="page-case">
+  <button class="case-back" onclick="showPage('work')">← Back to Work</button>
+  <div id="case-content"></div>
+</div>
+
+<!-- ABOUT PAGE -->
+<div class="page" id="page-about">
+  <div class="about-hero">
+    <div style="display:grid;grid-template-columns:1fr 220px;gap:60px;align-items:start;">
+      <div>
+        <h2 style="font-family:'DM Serif Display',serif;font-size:clamp(28px,4vw,48px);font-weight:400;color:var(--black);letter-spacing:-.02em;margin-bottom:6px;line-height:1.1;">About me <span style="font-family:'Noto Sans JP',sans-serif;font-size:clamp(16px,2vw,24px);font-weight:200;color:var(--gray-mid);letter-spacing:.1em;">| 自己紹介</span></h2>
+        <div style="width:40px;height:1px;background:var(--black);margin-bottom:32px;"></div>
+        <p style="font-size:15px;font-weight:400;line-height:1.9;color:var(--black);margin-bottom:10px;">楽天グループ株式会社にて、約3年間「楽天市場Webサイト」のディレクターとして、企画立案から効果測定まで、ユーザー体験の創出や改善に従事。</p>
+        <p style="font-size:15px;font-weight:300;line-height:1.9;color:var(--gray-dark);margin-bottom:10px;">元々は営業職としてキャリアをスタートしたが、ユーザーの感情を動かす体験設計やクリエイティブに強く惹かれ、社内公募制度を通じてディレクターへ転身。</p>
+        <p style="font-size:15px;font-weight:300;line-height:1.9;color:var(--gray-dark);margin-bottom:40px;">現在は、多様なステークホルダーと協働し、データドリブンなアプローチで、ユーザーの心を動かす体験と事業成長の両立を目指している。</p>
+        <p style="font-size:13px;font-weight:200;line-height:1.9;color:var(--gray-mid);margin-bottom:6px;"><strong>A Web Director with 3+ years of experience leading end-to-end digital direction at Rakuten Ichiba</strong>, one of Japan's largest e-commerce platforms.</p>
+        <p style="font-size:13px;font-weight:200;line-height:1.9;color:var(--gray-mid);">I began my career in sales, but was drawn to the power of experience design that moves people emotionally — and through an internal career transition, became a Web Director. I now collaborate with diverse stakeholders to balance emotionally resonant user experiences and business growth through a data-driven approach.</p>
+      </div>
+      <div style="display:flex;justify-content:center;padding-top:8px;">
+        <img src="images/profile.jpg" alt="Miyu Natsume" style="width:260px;height:260px;border-radius:50%;object-fit:cover;object-position:center top;filter:grayscale(15%);">
+      </div>
+    </div>
+  </div>
+
+  <div class="about-body">
+    <div>
+      <div class="about-section-label">Outside of Work | 私の日常</div>
+      <p style="font-size:15px;font-weight:300;color:var(--gray-dark);line-height:1.9;margin-bottom:6px;">幼い頃からピアノを習い、バンド・吹奏楽・作曲とさまざまな形で音楽に関わり、音楽は私の人生に欠かせない存在です。今はLIVEに行ったりレコードを集めたりして楽しんでいます。また、自然や旅も好きで、新しい景色と体験から刺激を得ています。</p>
+      <p style="font-size:13px;font-weight:200;color:var(--gray-mid);line-height:1.9;margin-bottom:48px;">Music has been at the heart of my life — from piano lessons as a child, to performing in bands and wind orchestras, to writing my own compositions. Music is something I simply cannot live without. These days, I enjoy going to live shows and collecting records. I'm also drawn to nature and travel — new landscapes and experiences are a constant source of inspiration for me.</p>
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <div style="width:180px;height:180px;flex-shrink:0;overflow:hidden;border-radius:4px;"><img src="images/life_01.jpg" alt="Record shop" style="width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(10%);transition:transform .4s ease;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'"></div>
+        <div style="width:180px;height:180px;flex-shrink:0;overflow:hidden;border-radius:4px;"><img src="images/life_02.jpg" alt="Live music" style="width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(10%);transition:transform .4s ease;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'"></div>
+        <div style="width:180px;height:180px;flex-shrink:0;overflow:hidden;border-radius:4px;"><img src="images/life_03.jpg" alt="Travel" style="width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(10%);transition:transform .4s ease;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'"></div>
+        <div style="width:180px;height:180px;flex-shrink:0;overflow:hidden;border-radius:4px;"><img src="images/life_04.jpg" alt="Australia" style="width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(10%);transition:transform .4s ease;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <span class="footer-copy">© 2026 Miyu Natsume</span>
+  </footer>
+</div>
+
+<!-- RESUME PAGE -->
+<div class="page" id="page-resume">
+  <div class="resume-hero">
+    <div class="about-label">Resume</div>
+    <h2 class="about-title-en">Experience<br>& Background</h2>
+    <div class="about-title-ja">経歴・バックグラウンド</div>
+  </div>
+
+  <div class="resume-body">
+    <div class="resume-section">
+      <div class="resume-section-label">Work Experience <span style="font-family:'Noto Sans JP';font-weight:200;font-size:13px;color:var(--gray-light);margin-left:16px;">職務経歴</span></div>
+
+      <div class="resume-item">
+        <div class="resume-period">Jan 2023 — Mar 2026</div>
+        <div class="resume-detail">
+          <div class="resume-co-ja">楽天グループ株式会社（楽天市場）</div>
+          <div class="resume-co-en">Rakuten Group, Inc.</div>
+          <div class="resume-role-ja">Webディレクター</div>
+          <div class="resume-role-en">Web Director</div>
+          <p class="resume-desc-ja">コスメ・日用品・ギフトサービスなどの楽天市場Webディレクションを担当。企画立案からユーザー分析・制作進行・効果測定まで全工程を一貫して担当。大規模企画では、GMS前年比+37%・13億円超の流通を達成。</p>
+          <p class="resume-desc-en">Led end-to-end web direction for cosmetics, daily goods, and gift services on Rakuten Ichiba. Owned the full PDCA cycle from planning and user research through KPI measurement. Achieved 37% YoY GMV growth and ¥1.3B+ in page-attributed sales.</p>
+        </div>
+      </div>
+
+      <div class="resume-item">
+        <div class="resume-period">Jul 2020 — Dec 2022</div>
+        <div class="resume-detail">
+          <div class="resume-co-ja">楽天モバイル株式会社（出向）</div>
+          <div class="resume-co-en">Rakuten Mobile, Inc. (Secondment)</div>
+          <div class="resume-role-ja">法人営業</div>
+          <div class="resume-role-en">Sales</div>
+          <p class="resume-desc-ja">基地局設置に関する法人営業を担当。新規・既存顧客のニーズヒアリングから提案まで顧客折衝を一貫して担当。チームリーダーとしてメンバーのマネジメントも経験。</p>
+          <p class="resume-desc-en">Managed B2B sales for base station installation projects. Handled both new and existing clients, leading the full sales cycle from needs assessment to proposal. Also served as team leader, managing team members.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="resume-section">
+      <div class="resume-section-label">Education <span style="font-family:'Noto Sans JP';font-weight:200;font-size:13px;color:var(--gray-light);margin-left:16px;">学歴</span></div>
+
+      <div class="resume-item">
+        <div class="resume-period">Jan 2026 — Present</div>
+        <div class="resume-detail">
+          <div class="resume-co-ja">デジタルハリウッド大学</div>
+          <div class="resume-co-en">Digital Hollywood University</div>
+          <div class="resume-role-ja">グラフィック・UI専攻コース</div>
+          <div class="resume-role-en">Graphic & UI Design</div>
+          <p class="resume-desc-ja">就業と並行してUI/UXデザインを体系的に学習中。2026年7月卒業予定。</p>
+          <p class="resume-desc-en">Evening program in UI/UX and graphic design, studying alongside full-time work.</p>
+        </div>
+      </div>
+
+      <div class="resume-item">
+        <div class="resume-period">Apr 2016 — Mar 2020</div>
+        <div class="resume-detail">
+          <div class="resume-co-ja">同志社大学</div>
+          <div class="resume-co-en">Doshisha University</div>
+          <div class="resume-role-ja">商学部商学科 卒業</div>
+          <div class="resume-role-en">B.A. Commerce</div>
+          <p class="resume-desc-ja">データ分析・マーケティングを専攻。</p>
+          <p class="resume-desc-en">Majored in data analysis and marketing.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="resume-section">
+      <div class="resume-section-label">Skills & Tools <span style="font-family:'Noto Sans JP';font-weight:200;font-size:13px;color:var(--gray-light);margin-left:16px;">スキル</span></div>
+      <div style="display:flex;flex-wrap:wrap;">
+        <div class="about-skill-item"><span class="about-skill-en">Web Direction</span><span class="about-skill-ja">Webディレクション</span></div>
+        <div class="about-skill-item"><span class="about-skill-en">User Research & Interview</span><span class="about-skill-ja">ユーザーインタビュー・分析</span></div>
+        <div class="about-skill-item"><span class="about-skill-en">Competitive Analysis</span><span class="about-skill-ja">競合他社分析</span></div>
+        <div class="about-skill-item"><span class="about-skill-en">A/B Testing</span><span class="about-skill-ja">A/Bテスト設計</span></div>
+        <div class="about-skill-item"><span class="about-skill-en">KPI Measurement</span><span class="about-skill-ja">効果測定・KPI分析</span></div>
+        <div class="about-skill-item"><span class="about-skill-en">Figma / Photoshop / Illustrator</span><span class="about-skill-ja">デザインツール</span></div>
+        <div class="about-skill-item"><span class="about-skill-en">HTML / CSS</span><span class="about-skill-ja">コーディング</span></div>
+      </div>
+    </div>
+
+    <div class="resume-section">
+      <div class="resume-section-label">Certification & Language <span style="font-family:'Noto Sans JP';font-weight:200;font-size:13px;color:var(--gray-light);margin-left:16px;">資格・語学</span></div>
+      <div class="about-skill-item"><span class="about-skill-en">TOEIC 800 / 990</span><span class="about-skill-ja">英語</span></div>
+    </div>
+
+  </div>
+
+  <footer>
+    <span class="footer-copy">© 2026 Miyu Natsume</span>
+  </footer>
+</div>
+
+<script>
+const cases = {
+  1: {
+    num: 'Case 02',
+    titleEn: 'Redefining the Target: Youth Cosmetics Campaign',
+    titleJa: 'ターゲット再定義から生まれたコスメ企画<br><span style="font-size:0.6em;font-weight:300;opacity:0.6;">若年層向けコスメキャンペーン 企画・ディレクション</span>',
+    tags: ['User Research','Competitive Analysis','SNS Strategy','Design Direction'],
+    meta: [
+      {keyEn:'Role',keyJa:'役割',valEn:'Web Director (End-to-End)',valJa:'Webディレクター（企画〜リリース）'},
+      {keyEn:'Target',keyJa:'ターゲット',valEn:'Ages 18–29, Cosmetics Users',valJa:'18〜29歳 コスメ購入ユーザー'},
+      {keyEn:'Scope',keyJa:'担当範囲',valEn:'Research → Strategy → Design → Launch',valJa:'課題設定〜制作進行〜リリース'},
+    ],
+    steps: [
+      {labelEn:'01 — Problem Statement',labelJa:'課題設定',
+       en:"Rakuten Ichiba was struggling to acquire younger users (ages 18–29). The core challenge: how to plan and execute a campaign that uses the cosmetics category as an entry point to improve retention among this demographic.",
+       ja:'<ul><li>楽天市場全体で若年層の獲得ができていないことが課題</li><li>コスメジャンルを起点に、若年層の定着率向上を目指す企画立案が必要とされていた</li></ul>'},
+      {labelEn:'02 — User Research',labelJa:'ユーザー調査・課題発見',
+       en:"Conducted a two-phase research study. First, collected survey responses from 50 employees aged 22–28 who had used Qoo10. From these, selected 8 heavy Qoo10 users for in-depth interviews, observing their actual shopping flow via screen share.<br><br>Key findings:<br><ul><li data-num='true'>① 88% (7/8) referred to Qoo10 rankings before making a purchase decision — especially during Mega Sale events</li><li data-num='true'>② Rakuten's rankings reflect purchases by its core demographic (30–50s), making them feel irrelevant to younger users</li><li data-num='true'>③ Instant discounts resonate more than point rewards — unlike older users who value accumulating points</li><li data-num='true'>④ 75% (6/8) felt some level of anxiety about Qoo10 — payment security, suspicious ads, or server outages</li><li data-num='true'>⑤ Even existing Rakuten users switch to Qoo10 for cosmetics, separating their shopping by category</li></ul>",
+       ja:'2段階の調査を実施。まずQoo10を使ったことがある22〜28歳の社員を対象にアンケートを実施し50名から回収。その中からQoo10ヘビーユーザー8名でインタビューを実施。アプリを画面共有してもらいながら実際の買い物の手順を確認した。<br><br>主な発見：<br><ul><li data-num="true">① 88%（8名中7名）がQoo10のランキングを参照してから購入を決定。特にメガ割中のランキングを活用</li><li data-num="true">② 楽天のランキングは30〜50代が買っているコスメが表示され、自分に合っていると思えないことが発覚</li><li data-num="true">③ ポイント還元より即時割引を好む（世代別の価値観の違い）</li><li data-num="true">④ 75%（8名中6名）がQoo10の決済面・不審広告・サーバーダウンなどに不安を感じていた</li><li data-num="true">⑤ 楽天ユーザーでも商材でサービスを使い分けている</li></ul>'},
+      {labelEn:'03 — Competitive Analysis',labelJa:'競合分析・強みの発見',
+       en:"Comparative analysis with Qoo10 revealed a critical advantage: 100% (8/8) of interviewees said they trusted Rakuten more than Qoo10 in terms of payment, shipping, and product quality. This confirmed that Rakuten already had the foundation of trust — the gap was in trend appeal and discount structure, both of which could be addressed through strategy.",
+       ja:'Qoo10との比較分析で重要な強みが判明。決済・配送・品質などのサービス信頼性について、8名中8名（100%）が楽天の方が信頼できると回答。楽天はすでに信頼という強固な基盤を持っており、あとはトレンド訴求と割引設計で挽回できると判断。'},
+      {labelEn:'04 — Strategy & Execution',labelJa:'施策設計・実行',
+       en:"Based on research findings, designed three data-backed initiatives:<br><ul><li data-num='true'>① Introduced an age-filtered ranking showing only purchases by users aged 18–29 — directly addressing the insight that existing rankings felt irrelevant to younger users</li><li data-num='true'>② Shifted the value proposition from 'earn points' to 'up to 4,000 yen OFF' — directly competing with Qoo10's instant discount model</li><li data-num='true'>③ For campaign naming, proposed multiple candidates and surveyed 16 Gen Z members within the department on which name would make them want to visit the page. 'Beauty Buzz' received the most votes (9/16) and was selected. For influencer selection, conducted internal surveys on awareness, likability, and follow rate among Gen Z to inform casting decisions</li></ul>",
+       ja:'<ul><li data-num="true">① 18〜29歳のみに絞ったランキングを新設。既存ランキングが自分に合わないという課題に直接対応</li><li data-num="true">② 訴求を「4,000円OFF」「最大30%OFF」へ転換（Qoo10をベンチマーク）</li><li data-num="true">③ 企画名はいくつかの候補を提案し、部署内のZ世代16名にアンケートを実施。「ページを見たいと思うか」で最多得票（9名）を獲得した「Beauty Buzz」に決定。インフルエンサー起用も同様に、Z世代への認知・好感・フォロー状況をヒアリングし選定の判断材料とした</li></ul>'},
+      {labelEn:'05 — Design Direction',labelJa:'デザインディレクション',
+       en:"Directed a full visual overhaul to appeal to younger audiences. Introduced balloon typography and trend-forward color palettes — intentionally moving away from Rakuten's traditional red-and-gold aesthetic while maintaining brand credibility.",
+       ja:'<ul><li>若年層向けにトレンドのバルーン文字や色味を起用</li><li>「楽天らしくなさ」をいい意味で追求したトンマナへ刷新</li><li>ビジュアルとコピー全体の方向性を上流から定義した</li></ul>'},
+    ],
+    results: null,
+    note: {en:'Transferred before KPI measurement. Target metrics were set as: new user acquisition (ages 18–29), CVR, and repeat purchase rate within 3 months.',
+           ja:'異動により効果測定は未実施。設定指標：18〜29歳の新規ユーザー数・CVR・3ヶ月以内のリピート率'},
+    image: {src:'images/capture_cosme_campaign.jpg', alt:'Beauty Buzz Campaign', link:'https://event.rakuten.co.jp/beauty/z/campaign/', linkText:'View Site ↗'},
+    hasBefore: false,
+  },
+  2: {
+    num: 'Case 01',
+    titleEn: 'Campaign Design Driven by User Insight',
+    titleJa: 'ユーザーインサイトを起点にした大規模キャンペーン設計<br><span style="font-size:0.6em;font-weight:300;opacity:0.6;">暑さ対策フェア フルリニューアル</span>',
+    tags: ['Full Redesign','Team Lead (6 members)','KPI Planning','Ad Design'],
+    meta: [
+      {keyEn:'Role',keyJa:'役割',valEn:'Web Director — Team Lead (6 members)',valJa:'Webディレクター（6名チームをリード）'},
+      {keyEn:'Duration',keyJa:'制作期間',valEn:'6 months',valJa:'約6ヶ月'},
+      {keyEn:'Scope',keyJa:'担当範囲',valEn:'KPI Setting → Analysis → Concept → Production → Launch',valJa:'KPI設定〜分析〜コンセプト〜制作〜リリース'},
+    ],
+    steps: [
+      {labelEn:'01 — KPI Setting',labelJa:'KPI設定',
+       en:'<ul><li>Set GMV target: +10% YoY</li><li>Set ad revenue target: over ¥20M</li><li>Used these KPIs to align the full team and guide every design decision</li></ul>',
+       ja:'<ul><li>GMS前年比+10%・広告売上2,000万円以上をKPIに設定</li><li>全チームの判断軸として活用</li></ul>'},
+      {labelEn:'02 — Data Analysis & Problem Identification',labelJa:'分析・課題特定',
+       en:'<ul><li>Analyzed 2023 industry data: music festival attendance +41.5% YoY (Pia Research Institute), fireworks event market +450% YoY (JACE). Based on this recovery trend, predicted outdoor demand would accelerate further in summer 2024 — and decided to redesign the concept ahead of that shift</li><li>Analyzed previous year heatmap: outdoor-demand items showed +11% higher click rate vs. indoor categories, despite accounting for only ~30% of page content — a clear gap between user intent and content structure</li><li>Concluded the indoor-heavy structure was misaligned with actual user demand</li></ul>',
+       ja:'<ul><li>2023年の業界データを分析。音楽フェス動員数が前年比+41.5%（ぴあ総研）、花火大会市場が前年比+450%（日本イベント産業振興協会）と急回復。この回復トレンドが2024年夏にさらに加速すると予測し、コンセプト刷新の判断根拠とした</li><li>前年のヒートマップを分析。外出アイテムのクリック率は屋内カテゴリ比+11%高かったにもかかわらず、2023年のページ内掲載比率は約30%にとどまっており、ニーズとコンテンツ構成の乖離が浮き彫りに</li><li>外出需要に対してコンテンツが追いついていないことを課題として特定</li></ul>'},
+      {labelEn:'03 — Concept & Ad Design',labelJa:'コンセプト・広告設計',
+       en:'<ul><li>Refreshed the concept to "Comfort both indoors and outdoors" — increased outdoor item placement by ~20% YoY and added 6 new outdoor genres to the page lineup</li><li>Designed ad placements satisfying both store needs (high-unit indoor goods) and user needs (outdoor items), achieving over ¥20M in ad revenue</li><li>Proposed a cross-category purchase campaign — secured budget independently</li></ul>',
+       ja:'<ul><li>「おうちもおそとも快適に」へコンセプトを刷新し、外出アイテムの掲載数を前年比約20%増加・掲載ジャンルも外出カテゴリで6ジャンル追加</li><li>例年通り単価の高いおうちグッズを広告掲載したい店舗と、外出アイテムをニーズと感じるユーザー双方のニーズを満たす広告枠設計を実施し広告売上2千万円以上を達成</li><li>掲載ジャンルが増えた分、ジャンルごとに買い周り企画も自ら提案し予算獲得</li></ul>'},
+      {labelEn:'04 — Production & Team Lead',labelJa:'制作・チームリード',
+       en:'<ul><li>Managed a cross-functional team of 6 (ADs, designers, coders including contractors)</li><li>Delivered ~120 banners and 30+ pages within a 3-month production window</li><li>Handled scheduling, vendor management, and stakeholder coordination</li></ul>',
+       ja:'<ul><li>AD2名・デザイナー2名・コーダー2名（計6名）を統括</li><li>約3ヶ月でバナー約120枚・ページ30枚以上を制作</li><li>進行管理・外注調整も担当</li></ul>'},
+      {labelEn:'05 — Design & Content',labelJa:'デザイン・コンテンツ',
+       en:'<ul><li>Redesigned visual identity using warm/cool color contrasts</li><li>Introduced an original polar bear character to energize the page tone</li><li>Elevated placement of outdoor-demand items and expanded product volume</li><li>Launched a cross-category campaign (7x points for purchasing 3 categories), securing budget from marketing</li></ul>',
+       ja:'<ul><li>暑さと涼しさを色で表現したビジュアル設計へ刷新</li><li>しろくまキャラクターを新たに制作</li><li>外出需要アイテムの掲載位置を上位に変更・ボリューム拡充</li><li>3ジャンル購入でポイント7倍のキャンペーンを予算調達し実施</li></ul>'},
+    ],
+    results: [
+      {num:'↑37%',en:'GMV YoY Growth',ja:'流通総額 前年比改善'},
+      {num:'¥1.3B+',en:'Page-Attributed Sales',ja:'ページ経由GMS達成'},
+      {num:'¥20M+',en:'Ad Revenue',ja:'広告売上達成'},
+    ],
+    hasBefore: true,
+    beforeSrc:'images/img_01.png', afterSrc:'images/img_02.jpg',
+    beforeLink:'https://web.archive.org/web/20230602144954/https://event.rakuten.co.jp/genre/summer/',
+    afterLink:'https://event.rakuten.co.jp/genre/summer/',
+  },
+  3: {
+    num: 'Case 03',
+    titleEn: 'Data-Driven UI/UX Redesign: -4% Bounce Rate',
+    titleJa: 'データ分析で離脱率-4%を実現したUI/UX改善<br><span style="font-size:0.6em;font-weight:300;opacity:0.6;">楽券 トップページ改善</span>',
+    tags: ['UI/UX','Data Analysis','Wireframing','Competitive Research'],
+    meta: [
+      {keyEn:'Role',keyJa:'役割',valEn:'Web Director',valJa:'Webディレクター'},
+      {keyEn:'Duration',keyJa:'制作期間',valEn:'4 months',valJa:'約4ヶ月'},
+      {keyEn:'Scope',keyJa:'担当範囲',valEn:'Analysis → Concept → Wireframe → Direction',valJa:'競合分析〜コンセプト〜ワイヤーフレーム〜制作指示'},
+    ],
+    steps: [
+      {labelEn:'01 — Problem Statement',labelJa:'課題設定',
+       en:"Rakken (Rakuten's gift ticket service) had low brand awareness — 86% of traffic came from existing users, and the bounce rate sat at ~40%, indicating that new visitors were not finding the page compelling.<br><br><strong>Long-term goal:</strong> Establish Rakken as the first choice when people think of sending gifts on Rakuten.<br><strong>Mid-term KPIs:</strong> Reduce bounce rate by 10% / Increase new user visits by +10%<br><strong>Short-term approach:</strong> Identify quick wins through data, implement improvements, and iterate through PDCA cycles to steadily close the gap.",
+       ja:'楽券の認知度は低く、流入の86%が既存ユーザー。直帰率は約40%と高く、新規訪問者がページに価値を見出せていないことが課題だった。<br><br><strong>長期ゴール：</strong>「楽天でギフトを送るなら楽券」と第一想起されるブランドへ育てること。<br><strong>中期KPI：</strong>離脱率を10%改善 / 新規流入Visitsを+10%<br><strong>短期アプローチ：</strong>データで課題を特定し改善を実施。PDCAを回しながら徐々に目標値に近づける。'},
+      {labelEn:'02 — Data & Competitive Analysis',labelJa:'数値分析・競合分析',
+       en:'Analyzed heatmap data and found that many content blocks had click rates below 10%. Benchmarked against LINE Gift and found that scroll depth was approximately 2x longer — a significant UX gap. Further gaps uncovered:<br><ul><li data-num=\'true\'>① Lack of seasonal and occasion-based gift discovery</li><li data-num=\'true\'>② Insufficient visual cues for &ldquo;giftability&rdquo;</li><li data-num=\'true\'>③ Lack of clear navigation structure</li><li data-num=\'true\'>④ Inconsistent and oversized icons/buttons causing excess scroll</li><li data-num=\'true\'>⑤ Lack of consistent brand tone</li></ul>These findings confirmed the need for a full page overhaul targeting new users.',
+       ja:'ヒートマップを分析し、クリック率10%以下のコンテンツが多数発生していることを特定。LINEギフトとの比較ではスクロール回数が約2倍と、UIUX面での劣位も判明。課題が浮き彫りに。<br><ul><li data-num="true">① シーズンやイベントの切り口でのギフト提案の欠如</li><li data-num="true">② 看板画像のギフト感の欠如</li><li data-num="true">③ ナビゲーションの欠如</li><li data-num="true">④ アイコン・ボタンの不統一とサイズが大きくスクロール回数が増える問題</li><li data-num="true">⑤ トンマナ欠如</li></ul>これらの課題から、新規ユーザー向けのページ刷新が必要と判断。'},
+      {labelEn:'03 — Wireframe & Proposal',labelJa:'ワイヤーフレーム・提案',
+       en:'Created wireframes in Figma with a target of reducing scroll depth from 3 to 1. Right-sized buttons and banner widths to minimize drop-off. Proposed banner placements in high-demand seasonal campaigns (Christmas, Valentine) to create a new inflow channel for new users.',
+       ja:'<ul><li>Figmaでワイヤーフレームを作成。スクロール回数を3回→1回に削減することを設計目標に設定</li><li>ボタンサイズ・バナー幅を最適化し離脱を抑制</li><li>クリスマス・バレンタインなどギフト需要が高まるシーズナル企画へのバナー掲載を提案し、新規流入経路を設計</li></ul>'},
+      {labelEn:'04 — Production & Lead',labelJa:'制作・リード',
+       en:'Coordinated with the business unit, directed one designer, and managed external vendors. Completed a full redesign of 2 pages within a 2-month production sprint.',
+       ja:'<ul><li>事業部との折衝・デザイナー1名・外注調整を統括</li><li>約2ヶ月でページ2枚のフルリニューアルを完遂</li></ul>'},
+      {labelEn:'05 — KPI Results',labelJa:'効果測定',
+       en:'The redesign resulted in a 4% reduction in bounce rate and a 7% increase in page visits. Banner placements proposed in seasonal gift campaigns (Christmas, Valentine) drove a +13% increase in new user inflow.',
+       ja:'<ul><li>離脱率4%改善・ページVisits7%向上</li><li>クリスマス・バレンタイン特集へのバナー露出提案により、新規ユーザーの流入が+13%増加</li></ul>'},
+    ],
+    results: [
+      {num:'↓4%',en:'Bounce Rate Improvement',ja:'離脱率改善'},
+      {num:'↑7%',en:'Page Visits (PV)',ja:'ページVisits改善'},
+      {num:'↑13%',en:'New User Acquisition',ja:'新規ユーザー数増加'},
+    ],
+    hasBefore: true,
+    beforeSrc:'images/case2_before.jpg', afterSrc:'images/case2_after.jpg',
+    beforeLink:'https://web.archive.org/web/20250915150709/https://event.rakuten.co.jp/rakken/',
+    afterLink:'https://event.rakuten.co.jp/rakken/',
+  },
+};
+
+function showCase(n) {
+  const c = cases[n];
+  let html = `
+    <div class="case-hero">
+      <div class="case-num">${c.num}</div>
+      <h2 class="case-title-en">${c.titleJa}</h2>
+      <div class="case-title-ja">${c.titleEn}</div>
+      <div class="case-meta-row">
+        ${c.meta.map(m=>`<div class="case-meta-item"><div class="case-meta-key">${m.keyJa} / <span style="letter-spacing:.08em;">${m.keyEn}</span></div><div class="case-meta-val">${m.valJa}<br><span style="font-size:12px;color:var(--gray-mid);font-weight:200;">${m.valEn}</span></div></div>`).join('')}
+      </div>
+      ${c.note ? `<div style="margin-top:32px;padding:20px 24px;background:#f5f5f3;border-left:3px solid #0d0d0d;">
+        <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#888;margin-bottom:8px;">Note on KPI</div>
+        <p style="font-size:14px;font-weight:300;color:#3a3a3a;line-height:1.8;margin-bottom:20px;">${c.note.ja}</p>
+        <p style="font-size:12px;font-weight:200;color:#888;font-family:'DM Sans',sans-serif;line-height:1.8;">${c.note.en}</p>
+      </div>` : ''}
+    </div>
+    <div class="case-body">
+      ${c.steps.map(s=>`
+        <div class="case-step">
+          <div class="case-step-label">${s.labelEn} / <span class="case-step-label-ja">${s.labelJa}</span></div>
+          <div class="case-step-content-ja">${s.ja}</div>
+          <div class="case-step-content-en">${s.en}</div>
+        </div>
+      `).join('')}
+    </div>`;
+
+  if(c.results) {
+    html += `
+    <div style="padding:0 max(32px, calc((100% - 1060px) / 2));margin-bottom:0;">
+      <div style="font-size:18px;letter-spacing:.2em;text-transform:uppercase;color:var(--gray-mid);padding-bottom:12px;border-bottom:1px solid var(--line);margin-bottom:0;">Results <span style="font-family:'Noto Sans JP';font-weight:200;font-size:13px;letter-spacing:.06em;text-transform:none;float:right;">成果</span></div>
+      <div style="display:grid;grid-template-columns:repeat(${c.results.length},1fr);background:var(--line);margin:0 0 80px;">${c.results.map(r=>`<div class="case-result"><div class="case-result-num">${r.num}</div><div class="case-result-en">${r.en}</div><div class="case-result-ja">${r.ja}</div></div>`).join('')}</div>
+    </div>`;
+  }
+
+  if(c.hasBefore) {
+    html += `<div class="case-images">
+      <div class="case-img-label">Before / After</div>
+      <div class="ba-grid">
+        <div class="ba-item">
+          <div class="ba-bar"><span class="ba-bar-label">Before</span><a href="${c.beforeLink}" target="_blank" rel="noopener" class="ba-bar-link">Archive ↗</a></div>
+          <div class="ba-img"><img src="${c.beforeSrc}" alt="Before"></div>
+        </div>
+        <div class="ba-item">
+          <div class="ba-bar"><span class="ba-bar-label">After</span><a href="${c.afterLink}" target="_blank" rel="noopener" class="ba-bar-link">View Site ↗</a></div>
+          <div class="ba-img"><img src="${c.afterSrc}" alt="After"></div>
+        </div>
+      </div>
+    </div>`;
+  } else if(c.image) {
+    html += `<div class="case-images">
+      <div class="case-img-label">Page Visual</div>
+      <img src="${c.image.src}" alt="${c.image.alt}" style="width:100%;display:block;">
+      <div style="margin-top:16px;"><a href="${c.image.link}" target="_blank" rel="noopener" style="font-size:18px;letter-spacing:.1em;text-transform:uppercase;color:var(--gray-mid);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--black)'" onmouseout="this.style.color='var(--gray-mid)'">${c.image.linkText}</a></div>
+    </div>`;
+  }
+
+  document.getElementById('case-content').innerHTML = html;
+  showPage('case');
+  window.scrollTo(0,0);
+}
+
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  const navEl = document.getElementById('nav-'+name);
+  if(navEl) navEl.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// Fade in
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')});
+},{threshold:0.1});
+document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
+
+// Email
+(function(){
+  var u='myynjsgg',d='gmail.com';
+  var el=document.getElementById('contact-mail-work');
+  if(el) el.innerHTML='<a href="mailto:'+u+'@'+d+'" style="font-size:18px;font-weight:300;color:var(--gray-dark);text-decoration:none;">'+u+'@'+d+'</a>';
+})();
+</script>
+</body>
+</html>
